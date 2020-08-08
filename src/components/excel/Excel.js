@@ -1,35 +1,32 @@
-import { $ } from "../../core/dom";
+import {$} from '@core/dom'
 
 export class Excel {
   constructor(selector, options) {
     this.$el = $(selector)
     this.components = options.components || []
   }
+
   getRoot() {
-    let $root = $.create('div', 'excel')
+    const $root = $.create('div', 'excel')
 
-    this.components = this.components.map(Companent => {
-      let $el = $.create('div', Companent.className)
-      let companent = new Companent($el)
-      if (companent.name) {
-        window[companent.name] = companent
-      }
-
-      $el.html(companent.toHTML())
+    this.components = this.components.map(Component => {
+      const $el = $.create('div', Component.className)
+      const component = new Component($el)
+      // // DEBUG
+      // if (component.name) {
+      //   window['c' + component.name] = component
+      // }
+      $el.html(component.toHTML())
       $root.append($el)
-
-      return companent
-    });
+      return component
+    })
 
     return $root
   }
+
   render() {
     this.$el.append(this.getRoot())
 
-    this.components.forEach(element => {
-      console.log(element)
-      element.init()
-
-    });
+    this.components.forEach(component => component.init())
   }
 }
